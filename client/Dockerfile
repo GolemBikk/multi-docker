@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN nmp run build
+RUN npm run build
 
 FROM nginx
 

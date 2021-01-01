@@ -1,0 +1,26 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t dorianadret/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true dorianadret/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t dorianadret/multi-client ./client
+  - docker build -t dorianadret/multi-nginx ./nginx
+  - docker build -t dorianadret/multi-server ./server
+  - docker build -t dorianadret/multi-worker ./worker
+  # Log in to the docker CLI
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  
+  #Take those images to docker.hub
+
+  - docker push dorianadret/multi-client
+  - docker push dorianadret/multi-nginx
+  - docker push dorianadret/multi-server
+  - docker push dorianadret/multi-worker
+
