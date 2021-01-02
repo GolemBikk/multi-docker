@@ -24,3 +24,14 @@ after_success:
   - docker push dorianadret/multi-server
   - docker push dorianadret/multi-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: eu-central-1
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-eu-central-1-258376734461
+  bucket_path: docker-multi
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
